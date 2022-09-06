@@ -1,5 +1,5 @@
-# DeepRule
-Compete code of DeepRule
+# ChartOCR
+Fork the code from the ChartOCR [github](https://github.com/soap117/DeepRule), and update the instructions for environment setup. 
 ## Getting Started
 Please first install [Anaconda](https://anaconda.org) and create an Anaconda environment using the provided package list.
 ```
@@ -15,25 +15,34 @@ Our current implementation only supports GPU so you need a GPU and need to have 
 
 ### Compiling Corner Pooling Layers
 You need to compile the C++ implementation of corner pooling layers. 
-Please check the latest CornerNet on github if you find problems.
+Please check the latest [CornerNetLite](https://github.com/princeton-vl/CornerNet-Lite) on github if you find problems.
 ```
-cd <CornerNet dir>/models/py_utils/_cpools/
+cd <CornerNetLite dir>/core/models/py_utils/_cpools/
 python setup.py build_ext --inplace
 ```
 
 ### Compiling NMS
 You also need to compile the NMS code (originally from [Faster R-CNN](https://github.com/rbgirshick/py-faster-rcnn/blob/master/lib/nms/cpu_nms.pyx) and [Soft-NMS](https://github.com/bharatsingh430/soft-nms/blob/master/lib/nms/cpu_nms.pyx)).
 ```
-cd <CornerNet dir>/external
+cd <CornerNetLite dir>/core/external
+make
+```
+
+After this step, you also need to compile the NMS code in this github repo
+
+```
+cd external
 make
 ```
 
 ### Installing MS COCO APIs
 You also need to install the MS COCO APIs.
 ```
-cd <CornerNet dir>/data
+cd <CornerNet-Lite dir>
+mkdir data
+cd <CornerNet-Lite dir>/data
 git clone git@github.com:cocodataset/cocoapi.git coco
-cd <CornerNet dir>/data/coco/PythonAPI
+cd <CornerNet-Lite dir>/data/coco/PythonAPI
 make
 ```
 
