@@ -253,8 +253,8 @@ def test(image_path, data_type=0, debug=False, suffix=None, min_value_official=N
 
 if __name__ == "__main__":
     methods = Pre_load_nets(2, 0)
-    tar_path = '/home/t-juluo/WebData/real_pie/image'
-    save_path = '/home/t-juluo/WebData/real_pie/result.json'
+    tar_path = '/home/mingyang/semafor/data/pew_data/pew_pie'
+    save_path = '/home/mingyang/semafor/data/pew_data/pew_pie/result.json'
     rs_dict = {}
     images = os.listdir(tar_path)
     for image in tqdm(images):

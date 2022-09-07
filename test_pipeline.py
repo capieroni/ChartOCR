@@ -24,6 +24,9 @@ torch.backends.cudnn.benchmark = False
 import requests
 import time
 import re
+from paddleocr import PaddleOCR,draw_ocr
+ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False)
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Test CornerNet")
     parser.add_argument("--cfg_file", dest="cfg_file", help="config file", default="CornerNetLine", type=str)
@@ -120,26 +123,16 @@ def Pre_load_nets():
 methods = Pre_load_nets()
 
 def ocr_result(image_path):
-    subscription_key = "ad143190288d40b79483aa0d5c532724"
-    vision_base_url = "https://westus2.api.cognitive.microsoft.com/vision/v2.0/"
-    ocr_url = vision_base_url + "read/core/asyncBatchAnalyze"
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key, 'Content-Type': 'application/octet-stream'}
-    params = {'language': 'unk', 'detectOrientation': 'true'}
-    image_data = open(image_path, "rb").read()
-    response = requests.post(ocr_url, headers=headers, params=params, data=image_data)
-    response.raise_for_status()
-    op_location = response.headers['Operation-Location']
-    analysis = {}
-    while "recognitionResults" not in analysis.keys():
-        time.sleep(3)
-        binary_content = requests.get(op_location, headers=headers, params=params).content
-        analysis = json.loads(binary_content.decode('ascii'))
-    line_infos = [region["lines"] for region in analysis["recognitionResults"]]
+    result = ocr.ocr(image_path, cls=True)
     word_infos = []
-    for line in line_infos:
-        for word_metadata in line:
-            for word_info in word_metadata["words"]:
-                word_infos.append(word_info)
+    for i, line in enumerate(result):
+        word_info = {}
+        #get the top-left and bottom right corner
+        if line[1][1] > 0.75:
+            word_info['boundingBox'] = [line[0][0][0], line[0][0][1], line[0][1][0], line[0][1][1], line[0][2][0], line[0][2][1], line[0][3][0], line[0][3][1]]
+            word_info['text'] = line[1][0]
+            word_infos.append(word_info)
+
     return word_infos
 
 def check_intersection(box1, box2):
@@ -274,10 +267,18 @@ def test(image_path, debug=False, suffix=None, min_value_official=None, max_valu
 
 if __name__ == "__main__":
 
-    tar_path = 'C:/work/clsdata(1031)/cls/images/test2019'
+    tar_path = '/home/mingyang/semafor/data/sample_semafor_data/semafor_sample_images/area'
+    dest = '/home/mingyang/semafor/data/chartOCR_generation/'
     images = os.listdir(tar_path)
     from random import shuffle
     shuffle(images)
-    for image in tqdm(images):
-        path = os.path.join(tar_path, image)
-        test(path)
+    for i,image in tqdm(enumerate(images)):
+        if i > 0:
+            path = os.path.join(tar_path, image)
+            result = test(path)
+            #save image to file
+            saved_img = result[1].convert('RGB')
+            #cv2.imwrite('/'.join([dest, "test.jpg"]), result[1])
+            saved_img.save('/'.join([dest, "test_area_{}.jpg".format(i)]))
+        
+
