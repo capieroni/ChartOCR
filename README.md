@@ -55,8 +55,8 @@ make
 ### Data Description (Updated on 11/21/2021)
 - For Pie data<br/>
 {"image_id": 74999, "category_id": 0, "bbox": [135.0, 60.0, 132.0, 60.0, 134.0, 130.0], "area": 105.02630551355209, "id": 433872}<br/>
-The meaning of the bbox is [center_x, center_y, edge_1_x, edge_1_y, edge_2_x, edge_2_y]<br/>
-It’s the three critical points for a sector of the pie graph.
+The meaning of the bbox is [edge_1_x, edge_1_y, edge_2_x, edge_2_y,center_x, center_y]<br/>
+It’s the three critical points for a sector of the pie graph, the two sector adjacent points are ordered clock-wise. 
 
 - For the line data<br/>
 {"image_id": 120596, "category_id": 0, "bbox": [137.0, 131.0, 174.0, 113.0, 210.0, 80.0, 247.0, 85.0], "area": 0, "id": 288282}<br/>
