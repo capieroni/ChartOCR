@@ -16,7 +16,7 @@ import importlib
 from RuleGroup.Cls import GroupCls
 from RuleGroup.Bar import GroupBar
 from RuleGroup.LineQuiry import GroupQuiry
-from RuleGroup.LIneMatch import GroupLine
+from RuleGroup.LIneMatch import GroupLine, GroupLineRaw
 from RuleGroup.Pie import GroupPie
 import math
 from PIL import Image, ImageDraw, ImageFont
@@ -255,10 +255,11 @@ def test(image_path, debug=False, suffix=None, min_value_official=None, max_valu
                 plot_area = cls_info[5][0:4]
             else:
                 plot_area = [0, 0, 600, 400]
-            print(min_value, max_value)
+            #print(min_value, max_value)
             image_painted, quiry, keys, hybrids = GroupQuiry(image_painted, keys, hybrids, plot_area, min_value, max_value)
             results = methods['LineCls'][2](image, methods['LineCls'][0], quiry, methods['LineCls'][1], debug=False, cuda_id=1)
-            line_data = GroupLine(image_painted, keys, hybrids, plot_area, results, min_value, max_value)
+            #line_data = GroupLineRaw(image_painted, keys, hybrids, plot_area, results, min_value, max_value)
+            line_data = GroupLineRaw(image_painted, keys, hybrids, results)
             return plot_area, image_painted, line_data, chartinfo
 
 
@@ -267,18 +268,27 @@ def test(image_path, debug=False, suffix=None, min_value_official=None, max_valu
 
 if __name__ == "__main__":
 
-    tar_path = '/home/mingyang/semafor/data/sample_semafor_data/semafor_sample_images/area'
-    dest = '/home/mingyang/semafor/data/chartOCR_generation/'
+    tar_path = '/home/mingyang/semafor/data/statista_data/test/line/imgs'
+    dest = '/home/mingyang/semafor/data/statista_data/test/line/chartOCR'
     images = os.listdir(tar_path)
-    from random import shuffle
-    shuffle(images)
+    #from random import shuffle
+    #shuffle(images)
     for i,image in tqdm(enumerate(images)):
-        if i > 0:
-            path = os.path.join(tar_path, image)
-            result = test(path)
-            #save image to file
-            saved_img = result[1].convert('RGB')
-            #cv2.imwrite('/'.join([dest, "test.jpg"]), result[1])
-            saved_img.save('/'.join([dest, "test_area_{}.jpg".format(i)]))
+        file_name=image.split(".")[0]
+        save_path = f"{dest}/{file_name}.json"
+        #if i > 0:
+        path = os.path.join(tar_path, image)
+        result = test(path)
+        print(result[2])
+
+        output_result = {"bbox": [], "id": file_name}
+        output_result["bbox"] = result[2]
+        with open(save_path, "w") as f:
+            json.dump(output_result, f)
+        #save image to file
+        #saved_img = result[1].convert('RGB')
+        #cv2.imwrite('/'.join([dest, "test.jpg"]), result[1])
+        #saved_img.save('/'.join([dest, "test_area_{}.jpg".format(i)]))
+        break
         
 
