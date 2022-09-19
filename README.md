@@ -113,3 +113,27 @@ python test_pipe_type_cloud.py --image_path <image_path> --save_path <save_path>
 e.g.
 python test_pipe_type_cloud.py --image_path /data/bar_test --save_path save --type Bar
 ```
+## Instructions For Running Jupyter Notebook
+To generate the table from the predicted keypoints of ChartOCR, you can run the jupyter notebook that I built for the three types of charts: bar, line, and pie.  (The code for bar is still underdevelopment)
+
+### Environment Set Up
+Install [conda](https://docs.conda.io/en/latest/miniconda.html) and run the following command:
+```
+conda env create -f chart2table_env.yml
+```
+After you run this command, you will have a conda environment setup named "chart2table". To activate the conda environment to run the jupyter notebook, run
+```
+conda activate chart2table
+```
+
+### Run Jupyter Notebook
+Once, you activate the conda environment, run the following command to use the conda environment to run the jupyter notebook:
+```
+python -m ipykernel install --user --name=chart2table
+```
+After that, you can launch the jupyter notebook with
+```
+jupyter notebook --port=<Port Number>
+```
+The jupyter notebook will then be read to view and edit at localhost:<Port Number> on your local browser. You can then access the three jupyter notebooks for pie, line and bar chart2table conversion. 
+
