@@ -137,3 +137,6 @@ jupyter notebook --port=<Port Number>
 ```
 The jupyter notebook will then be read to view and edit at localhost:<Port Number> on your local browser. You can then access the three jupyter notebooks for pie, line and bar chart2table conversion. 
 
+### Download the Chart Dataset
+To run the jupyter notebook, you will also need the chart dataset from [here](https://drive.google.com/file/d/1wVSUuCOmcSt7t34MizX0yKgFX3ybM3zd/view?usp=sharing) 
+ 
