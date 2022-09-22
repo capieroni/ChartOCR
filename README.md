@@ -119,7 +119,7 @@ To generate the table from the predicted keypoints of ChartOCR, you can run the 
 ### Environment Set Up
 Install [conda](https://docs.conda.io/en/latest/miniconda.html) and run the following command:
 ```
-conda env create -f chart2table_env.yml
+conda env create -f chart2table_env.yaml
 ```
 After you run this command, you will have a conda environment setup named "chart2table". To activate the conda environment to run the jupyter notebook, run
 ```
